@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iris Flower ML App</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(120deg, #ff6a00, #ee0979);
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 40px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .profile-card {
+            width: 300px;
+            text-align: center;
+        }
+
+        .profile-card img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 5px solid #ff6a00;
+            object-fit: cover;
+        }
+
+        .profile-links a {
+            display: inline-block;
+            margin: 5px;
+            padding: 6px 12px;
+            background: linear-gradient(45deg, #ff6a00, #ee0979);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .form-card {
+            width: 420px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .model-select {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .result-section {
+            width: 85%;
+            margin: auto;
+            margin-top: 30px;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .prediction-box {
+            text-align: center;
+            font-size: 24px;
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #0072ff;
+            color: white;
+        }
+
+        h3 {
+            color: #ee0979;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    🌸 Iris Flower Prediction Using Machine Learning
+</div>
+
+<div class="main-container">
+
+    <!-- PROFILE -->
+    <div class="card profile-card">
+        <img src="{{ url_for('static', filename='photo_nikhil.jpeg') }}" alt="Profile Image">
+        <h3>Nikhil Goud</h3>
+        <p>Machine Learning Enthusiast | AI Developer</p>
+
+        <div class="profile-links">
+            <a href="https://github.com/NikhilGoud601" target="_blank">GitHub</a>
+            <a href="https://instagram.nikhil_aluvala_" target="_blank">Instagram</a>
+            <a href="mailto:nikhilgoud87122@gamil.com">Email</a>
+            <a href="tel:+918712245283">Call</a>
+        </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="card form-card">
+        <h2>Enter Flower Details</h2>
+
+        <form method="POST">
+            <input type="number" step="any" name="sepal_length" placeholder="Sepal Length" required>
+            <input type="number" step="any" name="sepal_width" placeholder="Sepal Width" required>
+            <input type="number" step="any" name="petal_length" placeholder="Petal Length" required>
+            <input type="number" step="any" name="petal_width" placeholder="Petal Width" required>
+
+            <div class="model-select">
+                <label><input type="radio" name="model" value="knn" required> KNN</label>
+                <label><input type="radio" name="model" value="nb" required> Naive Bayes</label>
+            </div>
+
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+
+</div>
+
+
+{% if prediction or performance %}
+<div class="result-section">
+
+    {% if prediction %}
+    <div class="prediction-box">
+        🌼 Prediction: {{ prediction }}
+    </div>
+    {% endif %}
+
+    {% if performance %}
+
+    <h3>Train Accuracy: {{ performance.train_accuracy }}</h3>
+
+    <h4>Train Confusion Matrix</h4>
+    <table>
+        {% for row in performance.train_confusion_matrix %}
+        <tr>
+            {% for val in row %}
+            <td>{{ val }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h4>Train Classification Report</h4>
+    <table>
+        <tr>
+            <th>Class</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1-Score</th>
+            <th>Support</th>
+        </tr>
+        {% for key, value in performance.train_classification_report.items() %}
+            {% if value is mapping %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ "%.2f"|format(value["precision"]) }}</td>
+                <td>{{ "%.2f"|format(value["recall"]) }}</td>
+                <td>{{ "%.2f"|format(value["f1-score"]) }}</td>
+                <td>{{ value["support"] }}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+    <h3>Test Accuracy: {{ performance.test_accuracy }}</h3>
+
+    <h4>Test Confusion Matrix</h4>
+    <table>
+        {% for row in performance.test_confusion_matrix %}
+        <tr>
+            {% for val in row %}
+            <td>{{ val }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h4>Test Classification Report</h4>
+    <table>
+        <tr>
+            <th>Class</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1-Score</th>
+            <th>Support</th>
+        </tr>
+        {% for key, value in performance.test_classification_report.items() %}
+            {% if value is mapping %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ "%.2f"|format(value["precision"]) }}</td>
+                <td>{{ "%.2f"|format(value["recall"]) }}</td>
+                <td>{{ "%.2f"|format(value["f1-score"]) }}</td>
+                <td>{{ value["support"] }}</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+
+    {% endif %}
+
+</div>
+{% endif %}
+
+</body>
+</html>
