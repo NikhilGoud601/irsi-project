@@ -148,7 +148,7 @@ The application is deployed using <b>Render Cloud Platform</b>.
 <p><i><img src="screenshots/input.png" width="800"></i></p>
 
 <h3>🔹 Test performwnce</h3>
-<p><i><img src="screenshots/test performwnce.png" width="800"></i></p>
+<p><i><img src="screenshots/test performance.png" width="800"></i></p>
 
 <h3>🔹 Train performance</h3>
 <p><i><img src="screenshots/train performance.png" width="800"></i></p>
