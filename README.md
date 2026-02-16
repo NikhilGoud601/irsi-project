@@ -200,7 +200,7 @@ Machine Learning Enthusiast <br>
 
 <p align="center">
 🔗 <b>Live Application:</b> YOUR_RENDER_LINK_HERE <br>
-📂 <b>GitHub Repository:</b> YOUR_GITHUB_REPO_LINK_HERE
+📂 <b>GitHub Repository:</b>https://github.com/NikhilGoud601/irsi-project.git
 </p>
 
 <hr>
